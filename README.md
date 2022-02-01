@@ -52,5 +52,3 @@ Please **fork** this repository on Github. When we release updates to this repo 
 * Click compare across forks
 * Select this repo as the base repo and your forked repository as the head
 * Create pull request
-
-
