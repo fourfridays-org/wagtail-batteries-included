@@ -43,14 +43,17 @@ To demo the repository and all its options:
     * Custom Project
     * Your forked repo URL
 
-Templates are very basic and more or less very alpha starting points. They would need to be customized and designed to your needs. The site is built-on Bootstrap 5 framework.
+Templates are very basic and more or less very alpha starting points. They would need to be customized and designed to your needs. The site is built-on Bootstrap 5.1.3 framework.
+
+We use gruntjs as our javascript task runner.
 
 ## How to Apply Updates
 Please **fork** this repository on Github. When we release updates to this repo you can apply those updates as well by:
 * Go to your forked repo on GitHub
 * Click Pull Requests -> New Pull Request
 * Click compare across forks
-* Select this repo as the base repo and your forked repository as the head
+* Select your forked repo as the base repo and fourfridays-org/base repo as the head
 * Create pull request
+* Merge Pull Request
 
 
