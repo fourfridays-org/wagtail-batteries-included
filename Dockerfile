@@ -13,10 +13,10 @@ COPY . /app
 
 COPY requirements.* /app/
 
-# RUN pip-compile
+RUN pip-compile
 RUN pip install -r requirements/production.txt
 
-#RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 80
 CMD uwsgi --http=0.0.0.0:80 --module=wsgi
