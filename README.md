@@ -1,9 +1,12 @@
 # base
+A [Wagtail](https://wagtail.org/ "Wagtail") website starting point. You can fork this repo as a starting point for your own Wagtail website. We like to think of it as a batteries included starting point for your Wagtail projects.
+
+[fourfridays](https://fourfridays.com "fourfridays"), like many other users of open source apps have been recipients of individuals and various teams hard work. In our efforts to give back to this beautiful community we have created this Wagtail base project.
 
 **Update** 
 Jan 31, 2021 - This readme is still in the works
 
-This repository is maintained by fourfridays. We fork this repo for our clients as a starting point for their Wagtail websites. Here are some feature sets already enabled and setup for you:
+This repository is maintained by [fourfridays](https://fourfridays.com "fourfridays"). We fork this repo for our clients as a starting point for their Wagtail websites. Here are some feature sets already enabled and setup for you:
 
 * Standard Page Template
     * Hero Images
@@ -43,7 +46,7 @@ To demo the repository and all its options:
     * Custom Project
     * Your forked repo URL
 
-Templates are very basic and more or less very alpha starting points. They would need to be customized and designed to your needs. The site is built-on Bootstrap 5.1.3 framework.
+Templates are very basic and more or less very alpha starting points. They would need to be customized and designed to your needs. The site is built-on Bootstrap framework.
 
 We use gruntjs as our javascript task runner.
 
@@ -52,8 +55,6 @@ Please **fork** this repository on Github. When we release updates to this repo 
 * Go to your forked repo on GitHub
 * Click Pull Requests -> New Pull Request
 * Click compare across forks
-* Select your forked repo as the base repo and fourfridays-org/base repo as the head
+* Select your forked repo as the base repo and fourfridays-org/wagtail-batteries-included repo as the head
 * Create pull request
 * Merge Pull Request
-
-
