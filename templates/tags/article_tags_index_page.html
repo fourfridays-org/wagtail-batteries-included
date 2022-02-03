@@ -1,0 +1,23 @@
+{% extends "production.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% wagtail_site as current_site %}
+{% block title %}Tags | {{ current_site.site_name }}{% endblock %}
+{% block extra_meta %}<meta name="robots" content="noindex">{% endblock %}
+{% block body_class %}blog-tags-index{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="my-3 text-center">All Tags</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline">
+                    <p>Hola! {{ request.path }}</p>
+                    {% regroup tags by tag as tag_list %}
+                    {% for tag in tag_list %}
+                        <li class="list-inline-item"><i class="fas fa-tag swatch-red" aria-hidden="true"></i> <a href="{{ request.path }}{{ tag.grouper.slug }}/">{{ tag.grouper }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

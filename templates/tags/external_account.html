@@ -1,0 +1,5 @@
+<ul class="m-3 p-2 list-inline">
+    {% for external_account in external_accounts %}
+        <li class="mx-2 list-inline-item"><a target="_blank" onclick="_gaq.push(['_trackEvent', 'footer links', '{{ external_account.account }}', 'clicked',, false]);" href="{{ external_account.url }}"><i class="fab fa-lg fa-{{ external_account.account }}"></i><span class="btn-label sr-only">{{ external_account.account }}</span></a></li>
+    {% endfor %}
+</ul>
