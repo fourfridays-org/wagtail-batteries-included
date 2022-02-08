@@ -182,10 +182,10 @@ FLICKR_API_USER = os.environ.get('FLICKR_API_USER', default='')
 
 # DJANGO ANYMAIL
 ANYMAIL = {
-    "EMAIL_API_KEY": os.environ.get('EMAIL_API_KEY', default=''),
-    "EMAIL_SENDER_DOMAIN": os.environ.get('EMAIL_SENDER_DOMAIN', default=''),
+    "MAILGUN_API_KEY": os.environ.get('EMAIL_API_KEY', default=''),
+    "MAILGUN_SENDER_DOMAIN": os.environ.get('EMAIL_SENDER_DOMAIN', default=''),
 }
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', default='')
+EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', default='')
 SERVER_EMAIL = os.environ.get('SERVER_EMAIL', default='')
 COMMENT_ADMIN_EMAIL = os.environ.get('COMMENT_ADMIN_EMAIL', default='')
