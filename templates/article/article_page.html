@@ -1,6 +1,7 @@
 {% extends "production.html" %}
 {% load account socialaccount flickr_tags wagtailcore_tags wagtailimages_tags %}
 {% block body_class %}blog-post{% endblock %}
+{% block head-extra %}<link rel="canonical" href="{{ page.full_url }}" />{% endblock head-extra %}
 {% get_providers as provider %}
 
 {% block content %}

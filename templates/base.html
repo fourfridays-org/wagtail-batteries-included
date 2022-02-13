@@ -19,6 +19,8 @@
 
         {# Global stylesheets #}
         <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+        {% if self.seo_title == 'Home' %}<link rel="canonical" href="{{ page.full_url }}" />{% endif %}
+        <script defer src="{% static 'js/fontawesome-free.min.js' %}"></script>
         {% block head-extra %}{% endblock head-extra %}
     </head>
 
