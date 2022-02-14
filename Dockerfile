@@ -10,12 +10,9 @@ RUN apt-get update \
 WORKDIR /app
 # copy the repository files to it
 COPY . /app
-
 COPY requirements.* /app/
 
-RUN pip-compile
 RUN pip install -r requirements/production.txt
-
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 80
