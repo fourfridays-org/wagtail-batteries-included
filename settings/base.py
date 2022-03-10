@@ -11,14 +11,11 @@ INSTALLED_APPS = [
     'anymail',
     'page',
 
-    'django.contrib.sitemaps',
-
-    'wagtail.contrib.table_block',
-
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
-    "wagtail.contrib.routable_page",
+    'wagtail.contrib.routable_page',
+    'wagtail.contrib.table_block',
     'wagtail.embeds',
     'wagtail.sites',
     'wagtail.users',
@@ -36,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sitemaps',
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
@@ -66,8 +64,14 @@ if sentry_dsn:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
+    def ignore_disallowedhost(event, hint):
+        if event.get('logger', None) == 'django.security.DisallowedHost':
+            return None
+        return event
+
     sentry_sdk.init(
         dsn=sentry_dsn,
+        before_send = ignore_disallowedhost,
         integrations=[DjangoIntegration()],
         release=os.environ.get('GIT_COMMIT', 'develop'),
         environment=os.environ.get('STAGE', 'local'),
@@ -96,8 +100,8 @@ HOST_DOMAIN = os.environ.get('HOST_DOMAIN', '').split(',')
 
 ALLOWED_HOSTS = [DIVIO_DOMAIN] + DIVIO_DOMAIN_ALIASES + DIVIO_DOMAIN_REDIRECTS + HOST_DOMAIN
 
-# Redirect to HTTPS by default, unless explicitly disabled
-SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT') != "False"
+# Redirect to HTTPS by default disabled, unless explicitly enabled
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT') == "True"
 
 TEMPLATES = [
     {
@@ -142,10 +146,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-USE_I18N = True
 LANGUAGE_CODE = 'en-us'
+USE_I18N = True
 USE_TZ = True
-TIME_ZONE = os.environ.get('TIME_ZONE', default='America/Los_Angeles')
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -168,7 +171,7 @@ DEFAULT_STORAGE_DSN = os.environ.get('DEFAULT_STORAGE_DSN')
 DefaultStorageClass = dsn_configured_storage_class('DEFAULT_STORAGE_DSN')
 
 # Django's DEFAULT_FILE_STORAGE requires the class name
-DEFAULT_FILE_STORAGE = 'settings.production.DefaultStorageClass'
+DEFAULT_FILE_STORAGE = 'settings.DefaultStorageClass'
 
 # only required for local file storage and serving, in development
 MEDIA_URL = 'media/'
@@ -182,8 +185,8 @@ FLICKR_API_USER = os.environ.get('FLICKR_API_USER', default='')
 
 # DJANGO ANYMAIL
 ANYMAIL = {
-    "MAILGUN_API_KEY": os.environ.get('EMAIL_API_KEY', default=''),
-    "MAILGUN_SENDER_DOMAIN": os.environ.get('EMAIL_SENDER_DOMAIN', default=''),
+    "MAILGUN_API_KEY": os.environ.get('MAILGUN_API_KEY', default=''),
+    "MAILGUN_SENDER_DOMAIN": os.environ.get('MAILGUN_SENDER_DOMAIN', default=''),
 }
 EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', default='')
