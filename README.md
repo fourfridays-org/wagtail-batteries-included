@@ -11,7 +11,7 @@ To run this repository locally please make sure to have docker and docker-compos
 2. Within the cloned folder in terminal run ` docker-compose run web python manage.py migrate `. This will apply all migrations to the database
 3. Create SuperUser, ` docker-compose run web python manage.py createsuperuser `
 4. Launch website locally, ` docker-compose up `. You can also run ` docker-compose up -d ` if you would like the service to run in the background
-5. Login to the website by opening http://localhost:8080/admin in your browser of choice. Use the credentials you created in step 3 to login.
+5. Login to the website by opening http://localhost:8000/admin in your browser of choice. Use the credentials you created in step 3 to login.
 
 # Deploying on a Kubernetes (K8) cluster
 
