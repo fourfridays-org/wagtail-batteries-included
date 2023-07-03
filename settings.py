@@ -153,7 +153,7 @@ else:
 
 STORAGES = {
     "default": {"BACKEND": storage_backend},
-    "staticfiles": {"BACKEND": staticfiles_backend},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
 
 # Media files
