@@ -154,9 +154,11 @@ else:
 
 STORAGES = {
     "default": {"BACKEND": storage_backend},
-    "staticfiles": {"BACKEND": staticfiles_backend},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
 
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = ["static"]
 
 # Media files
