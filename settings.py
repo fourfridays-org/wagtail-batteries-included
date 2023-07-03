@@ -131,6 +131,7 @@ AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", default=None)
 AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", default=None)
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_SIGNATURE_VERSION = os.environ.get("AWS_S3_SIGNATURE_VERSION", default="s3v4")
+AWS_DEFAULT_ACL = "public-read"
 AWS_IS_GZIPPED = True
 
 
