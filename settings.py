@@ -131,7 +131,7 @@ AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", default=None)
 AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", default=None)
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_SIGNATURE_VERSION = os.environ.get("AWS_S3_SIGNATURE_VERSION", default="s3v4")
-AWS_DEFAULT_ACL = "public-read"
+AWS_IS_GZIPPED = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -146,12 +146,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 if DEBUG == True:
     storage_backend = "django.core.files.storage.FileSystemStorage"
+    staticfiles_backend = "django.contrib.staticfiles.storage.StaticFilesStorage"
 else:
     storage_backend = "storages.backends.s3boto3.S3Boto3Storage"
+    staticfiles_backend = "storages.backends.s3boto3.S3StaticStorage"
 
 STORAGES = {
     "default": {"BACKEND": storage_backend},
-    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    "staticfiles": {"BACKEND": staticfiles_backend},
 }
 
 # Media files
