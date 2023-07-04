@@ -145,23 +145,20 @@ STATICFILES_FINDERS = [
 
 if DEBUG == True:
     storage_backend = "django.core.files.storage.FileSystemStorage"
-    staticfiles_backend = "django.contrib.staticfiles.storage.StaticFilesStorage"
-    STATIC_URL = "/static/"
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     # Media files
     MEDIA_ROOT = os.path.join("/data/media")
     MEDIA_URL = "media/"
 else:
     storage_backend = "storages.backends.s3boto3.S3Boto3Storage"
-    staticfiles_backend = "storages.backends.s3boto3.S3StaticStorage"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 
 STORAGES = {
     "default": {"BACKEND": storage_backend},
-    "staticfiles": {"BACKEND": staticfiles_backend},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
 
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = ["static"]
 
 
