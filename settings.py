@@ -127,7 +127,7 @@ AWS_S3_OBJECT_PARAMETERS = {
     "Expires": "Thu, 31 Dec 2099 20:00:00 GMT",
     "CacheControl": "max-age=94608000"
 }
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.us-east-2.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = "public-read"
 AWS_IS_GZIPPED = True
@@ -148,9 +148,13 @@ if DEBUG == True:
     staticfiles_backend = "django.contrib.staticfiles.storage.StaticFilesStorage"
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    # Media files
+    MEDIA_ROOT = os.path.join("/data/media")
+    MEDIA_URL = "media/"
 else:
     storage_backend = "storages.backends.s3boto3.S3Boto3Storage"
     staticfiles_backend = "storages.backends.s3boto3.S3StaticStorage"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 
 STORAGES = {
@@ -160,12 +164,8 @@ STORAGES = {
 
 STATICFILES_DIRS = ["static"]
 
-# Media files
-MEDIA_ROOT = os.path.join("/data/media")
-MEDIA_URL = "media/"
 
 # Wagtail settings
-
 WAGTAIL_SITE_NAME = os.environ.get(
     "WAGTAIL_SITE_NAME", default="Wagtail Batteries Included"
 )
