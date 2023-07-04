@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     "fontawesomefree",
     "users",
     "wagtailcodeblock",
+    "storages",
 
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
