@@ -132,6 +132,8 @@ AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=94608000"
 }
 
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = ["static"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -139,8 +141,6 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
-
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 if DEBUG == True:
     storage_backend = "django.core.files.storage.FileSystemStorage"
@@ -165,8 +165,6 @@ STORAGES = {
     "default": {"BACKEND": storage_backend},
     "staticfiles": {"BACKEND": staticfiles_backend},
 }
-
-STATICFILES_DIRS = ["static"]
 
 # Wagtail settings
 
