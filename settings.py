@@ -140,11 +140,12 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 if DEBUG == True:
     storage_backend = "django.core.files.storage.FileSystemStorage"
     staticfiles_backend = "django.contrib.staticfiles.storage.StaticFilesStorage"
     STATIC_URL = "/static/"
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     MEDIA_URL = "media/"
     MEDIA_ROOT = os.path.join("/data/media")
 else:
