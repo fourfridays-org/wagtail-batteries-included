@@ -13,7 +13,6 @@ INSTALLED_APPS = [
     "fontawesomefree",
     "users",
     "wagtailcodeblock",
-    "storages",
 
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -124,13 +123,16 @@ USE_TZ = True
 AWS_S3_ACCESS_KEY_ID = os.environ.get("AWS_S3_ACCESS_KEY_ID", default=None)
 AWS_S3_SECRET_ACCESS_KEY = os.environ.get("AWS_S3_SECRET_ACCESS_KEY", default=None)
 AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", default=None)
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-AWS_S3_FILE_OVERWRITE = False
-AWS_S3_SIGNATURE_VERSION = "s3v4"
-AWS_DEFAULT_ACL = "public-read"
-AWS_QUERYSTRING_AUTH = False
-# s3 static settings
-AWS_LOCATION = 'static'
+AWS_S3_OBJECT_PARAMETERS = {
+    "Expires": "Thu, 31 Dec 2099 20:00:00 GMT",
+    "CacheControl": "max-age=94608000"
+}
+AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", default=None)
+AWS_S3_ENDPOINT_URL = f"s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+AWS_S3_SIGNATURE_VERSION = os.environ.get("AWS_S3_SIGNATURE_VERSION", default="s3v4")
+AWS_S3_FILE_OVERWRITE = os.environ.get("AWS_S3_FILE_OVERWRITE", default=False)
+AWS_QUERYSTRING_AUTH = os.environ.get("AWS_QUERYSTRING_AUTH", default=False)
+AWS_IS_GZIPPED = os.environ.get("AWS_IS_GZIPPED", default=True)
 
 
 # Static files (CSS, JavaScript, Images)
@@ -139,27 +141,28 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
+STATICFILES_DIRS = ["static"]
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 if DEBUG == True:
     storage_backend = "django.core.files.storage.FileSystemStorage"
+    staticfiles_backend = "django.contrib.staticfiles.storage.StaticFilesStorage"
     # Media files
     MEDIA_ROOT = os.path.join("/data/media")
     MEDIA_URL = "media/"
 else:
     storage_backend = "storages.backends.s3boto3.S3Boto3Storage"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+    staticfiles_backend = "storages.backends.s3boto3.S3StaticStorage"
+    MEDIA_URL = f"https://{AWS_S3_ENDPOINT_URL}/"
 
 STORAGES = {
     "default": {"BACKEND": storage_backend},
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
 
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = ["static"]
-
-
 # Wagtail settings
+
 WAGTAIL_SITE_NAME = os.environ.get(
     "WAGTAIL_SITE_NAME", default="Wagtail Batteries Included"
 )
