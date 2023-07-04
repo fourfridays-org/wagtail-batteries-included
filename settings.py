@@ -146,7 +146,7 @@ if DEBUG == True:
     MEDIA_ROOT = os.path.join("/data/media")
     MEDIA_URL = "media/"
 else:
-    storage_backend = "storages.backends.s3boto3.S3Boto3Storage"
+    storage_backend = "storages.backends.s3boto3.S3Boto3Storage(bucket='wbi-s3', querystring_auth=False)"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
 STORAGES = {
