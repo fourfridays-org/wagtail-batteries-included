@@ -92,3 +92,7 @@ jobs:
       - name: 'Restart Kubernetes Deployment'
         run: |
           kubectl -n wbi rollout restart deployment wbi
+
+      - name: 'Run Collectstatic'
+        run: |
+          python3 manage.py collecstatic --no-input
