@@ -127,10 +127,6 @@ AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 AWS_S3_FILE_OVERWRITE = os.environ.get("AWS_S3_FILE_OVERWRITE", default=False)
 AWS_QUERYSTRING_AUTH = os.environ.get("AWS_QUERYSTRING_AUTH", default=False)
 AWS_IS_GZIPPED = os.environ.get("AWS_IS_GZIPPED", default=True)
-AWS_S3_OBJECT_PARAMETERS = {
-    "Expires": "Thu, 31 Dec 2099 20:00:00 GMT",
-    "CacheControl": "max-age=94608000"
-}
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = ["static"]
