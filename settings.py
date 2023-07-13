@@ -138,7 +138,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-if DEBUG:
+if DEBUG == "True":
     storage_backend = "django.core.files.storage.FileSystemStorage"
     staticfiles_backend = "django.contrib.staticfiles.storage.StaticFilesStorage"
     STATIC_URL = "/static/"
