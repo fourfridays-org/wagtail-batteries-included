@@ -170,7 +170,7 @@ WAGTAIL_SITE_NAME = os.environ.get(
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = os.environ.get("BASE_URL", default="localhost")
+WAGTAILADMIN_BASE_URL = os.environ.get("WAGTAILADMIN_BASE_URL", default="localhost")
 
 DOMAIN_ALIASES = [
     d.strip() for d in os.environ.get("DOMAIN_ALIASES", "").split(",") if d.strip()
