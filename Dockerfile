@@ -24,6 +24,8 @@ COPY requirements.* /app/
 RUN pip install -U pip pip-tools wheel \
     && pip install -r requirements.txt
 
+RUN python manage.py collectstatic --noinput
+
 # Port used by this container to serve HTTP.
 EXPOSE 8000
 
