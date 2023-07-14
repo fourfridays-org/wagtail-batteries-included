@@ -14,14 +14,14 @@ spec:
     spec:
       initContainers:
         - name: migrate
-          image: ghcr.io/fourfridays/wagtail-batteries-included:latest
+          image: ghcr.io/fourfridays-org/wagtail-batteries-included:latest
           imagePullPolicy: Always
           command: ["python", "manage.py", "migrate"]
           envFrom:
           - secretRef:
               name: secret
       containers:
-        - image: ghcr.io/fourfridays/wagtail-batteries-included:latest
+        - image: ghcr.io/fourfridays-org/wagtail-batteries-included:latest
           name: wbi
           resources:
             requests:
