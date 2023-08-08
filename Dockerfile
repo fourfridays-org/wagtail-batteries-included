@@ -44,11 +44,11 @@ CMD uwsgi --http=0.0.0.0:8000 --master --module=wsgi \
     # Restart workers after this many requests
     --max-requests=1000 \
     # Restart workers after this many seconds
-    --max-worker-lifetime = 3600 \
+    --max-worker-lifetime=3600 \
     # Restart workers after this much resident memory
-    --reload-on-rss = 2048 \
+    --reload-on-rss=2048 \
     # How long to wait before forcefully killing workers
-    --worker-reload-mercy = 60 \
+    --worker-reload-mercy=60 \
     --ignore-write-errors \
     --disable-write-exception \
     # Disable built-in logging 
