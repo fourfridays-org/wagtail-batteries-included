@@ -1,11 +1,12 @@
 from pathlib import Path
+
 import os
 import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = os.environ.get("DJANGO_DEBUG")
+DEBUG = os.environ.get("DJANGO_DEBUG") == "True"
 
 INSTALLED_APPS = [
     "article",
@@ -120,18 +121,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-AWS_S3_ACCESS_KEY_ID = os.environ.get("AWS_S3_ACCESS_KEY_ID", default=None)
-AWS_S3_SECRET_ACCESS_KEY = os.environ.get("AWS_S3_SECRET_ACCESS_KEY", default=None)
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", default=None)
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-AWS_S3_FILE_OVERWRITE = os.environ.get("AWS_S3_FILE_OVERWRITE", default=False)
-AWS_QUERYSTRING_AUTH = os.environ.get("AWS_QUERYSTRING_AUTH", default=False)
-AWS_IS_GZIPPED = os.environ.get("AWS_IS_GZIPPED", default=True)
-AWS_S3_OBJECT_PARAMETERS = {
-    "Expires": "Thu, 31 Dec 2099 20:00:00 GMT",
-    "CacheControl": "max-age=94608000"
-}
-
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = ["static"]
 
@@ -142,17 +131,29 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-if DEBUG == "True":
+staticfiles_backend = "django.contrib.staticfiles.storage.StaticFilesStorage"
+STATIC_URL = "/static/"
+
+if DEBUG is True:
     storage_backend = "django.core.files.storage.FileSystemStorage"
-    staticfiles_backend = "django.contrib.staticfiles.storage.StaticFilesStorage"
-    STATIC_URL = "/static/"
     MEDIA_URL = "media/"
     MEDIA_ROOT = os.path.join("/data/media")
 else:
+    AWS_S3_ACCESS_KEY_ID = os.environ.get("AWS_S3_ACCESS_KEY_ID", default=None)
+    AWS_S3_SECRET_ACCESS_KEY = os.environ.get("AWS_S3_SECRET_ACCESS_KEY", default=None)
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", default=None)
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    AWS_S3_FILE_OVERWRITE = os.environ.get("AWS_S3_FILE_OVERWRITE", default=False)
+    AWS_QUERYSTRING_AUTH = os.environ.get("AWS_QUERYSTRING_AUTH", default=False)
+    AWS_IS_GZIPPED = os.environ.get("AWS_IS_GZIPPED", default=True)
+    AWS_S3_OBJECT_PARAMETERS = {
+        "Expires": "Thu, 31 Dec 2099 20:00:00 GMT",
+        "CacheControl": "max-age=94608000"
+    }
     # S3 static settings
-    STATIC_LOCATION = "static"
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
-    staticfiles_backend = "page.storage_backends.StaticStorage"
+    # STATIC_LOCATION = "static"
+    # STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
+    # staticfiles_backend = "page.storage_backends.StaticStorage"
     # S3 public media settings
     PUBLIC_MEDIA_LOCATION = "media"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
