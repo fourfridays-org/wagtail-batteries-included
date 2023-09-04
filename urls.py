@@ -11,7 +11,7 @@ from wagtail.contrib.sitemaps.views import sitemap
 urlpatterns = [
     path('django-admin/', admin.site.urls),
     re_path(r'^robots\.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
-    re_path(r'^sitemap\.xml$', sitemap),
+    path('sitemap.xml', sitemap),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
 ]
