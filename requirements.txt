@@ -69,6 +69,12 @@ filetype==1.2.0
     # via willow
 fontawesomefree==6.4.0
     # via -r requirements.in
+gevent==23.9.0.post1
+    # via -r requirements.in
+greenlet==2.0.2
+    # via gevent
+gunicorn==21.2.0
+    # via -r requirements.in
 html5lib==1.1
     # via wagtail
 idna==3.4
@@ -81,6 +87,8 @@ l18n==2021.3
     # via wagtail
 openpyxl==3.1.2
     # via wagtail
+packaging==23.1
+    # via gunicorn
 pillow==10.0.0
     # via
     #   -r requirements.in
@@ -128,8 +136,6 @@ urllib3==1.26.15
     #   django-anymail
     #   requests
     #   sentry-sdk
-uwsgi==2.0.21
-    # via -r requirements.in
 wagtail==5.1
     # via
     #   -r requirements.in
@@ -142,3 +148,10 @@ whitenoise==6.5.0
     # via -r requirements.in
 willow[heif]==1.6.1
     # via wagtail
+zope-event==5.0
+    # via gevent
+zope-interface==6.0
+    # via gevent
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
