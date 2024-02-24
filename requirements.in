@@ -15,4 +15,4 @@ wagtail==6.0.1
 whitenoise==6.6.0
 willow==1.6.2
 
-wagtailcodeblock==1.29.0.1
+wagtailcodeblock==1.29.0.2

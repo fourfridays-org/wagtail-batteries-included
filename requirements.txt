@@ -144,7 +144,7 @@ wagtail==6.0.1
     # via
     #   -r requirements.in
     #   wagtailcodeblock
-wagtailcodeblock==1.29.0.1
+wagtailcodeblock==1.29.0.2
     # via -r requirements.in
 webencodings==0.5.1
     # via html5lib
