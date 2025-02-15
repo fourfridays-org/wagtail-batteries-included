@@ -6,7 +6,6 @@ import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = os.environ.get("DJANGO_DEBUG") == "True"
 
 INSTALLED_APPS = [
     "article",
@@ -72,6 +71,22 @@ if sentry_dsn:
 
 ROOT_URLCONF = "urls"
 
+SECRET_KEY = os.environ.get("SECRET_KEY", default="<a string of random characters>")
+
+DEBUG = os.environ.get("DEBUG") == "True"
+
+DOMAIN_ALIASES = [
+    d.strip() for d in os.environ.get("DOMAIN_ALIASES", "").split(",") if d.strip()
+]
+
+ALLOWED_HOSTS = DOMAIN_ALIASES
+CSRF_TRUSTED_ORIGINS = [
+    os.environ.get("CSRF_TRUSTED_ORIGINS", default="http://localhost")
+]
+
+# Custom User model
+AUTH_USER_MODEL = "users.User"
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -111,15 +126,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "America/New_York"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
+TIME_ZONE = "UTC"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = ["static"]
@@ -172,28 +182,14 @@ STORAGES = {
 WAGTAIL_SITE_NAME = os.environ.get(
     "WAGTAIL_SITE_NAME", default="Wagtail Batteries Included"
 )
-
-# Base URL to use when referring to full URLs within the Wagtail admin backend -
-# e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = os.environ.get("WAGTAILADMIN_BASE_URL", default="localhost")
 
-DOMAIN_ALIASES = [
-    d.strip() for d in os.environ.get("DOMAIN_ALIASES", "").split(",") if d.strip()
-]
-ALLOWED_HOSTS = DOMAIN_ALIASES
-CSRF_TRUSTED_ORIGINS = [
-    os.environ.get("CSRF_TRUSTED_ORIGINS", default="http://localhost")
-]
-SECRET_KEY = os.environ.get("SECRET_KEY", default="<a string of random characters>")
-
-# Custom User model
-AUTH_USER_MODEL = "users.User"
-
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+SITE_ID = 1
 
 # Make low-quality but small images
-WAGTAILIMAGES_JPEG_QUALITY = 40
-WAGTAILIMAGES_WEBP_QUALITY = 45
+WAGTAILIMAGES_JPEG_QUALITY = 70
+WAGTAILIMAGES_WEBP_QUALITY = 75
 WAGTAIL_ENABLE_WHATS_NEW_BANNER = False
 WAGTAILEMBEDS_FINDERS = [{"class": "wagtail.embeds.finders.oembed"}]
 
@@ -205,3 +201,46 @@ WAGTAILIMAGES_FORMAT_CONVERSIONS = {
     'bmp': 'jpeg',
     'webp': 'webp',
 }
+
+# Logging configuration
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "info.log"),
+            "formatter": "verbose",
+        },
+        "sentry": {
+            "level": "ERROR",  # Capture errors and above to Sentry
+            "class": "sentry_sdk.integrations.logging.EventHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file", "sentry"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
+}
+
+# to disable the checkDATA_UPLOAD_MAX_NUMBER_FIELDS = None
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
