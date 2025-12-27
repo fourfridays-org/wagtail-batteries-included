@@ -1,11 +1,14 @@
-from pathlib import Path
-
+import logging
 import os
 import dj_database_url
+
+from pathlib import Path
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Doing this boolean check against str values. Can't set boolean values in configmap
+DEBUG = os.environ.get("DJANGO_DEBUG") == "True"
 
 INSTALLED_APPS = [
     "article",
@@ -53,9 +56,11 @@ MIDDLEWARE = [
 ]
 
 sentry_dsn = os.environ.get("SENTRY_DSN", "")
-if sentry_dsn:
+SENTRY_ENABLED = bool(sentry_dsn)
+if SENTRY_ENABLED:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.logging import LoggingIntegration
 
     def ignore_disallowedhost(event, hint):
         if event.get("logger", None) == "django.security.DisallowedHost":
@@ -65,8 +70,15 @@ if sentry_dsn:
     sentry_sdk.init(
         dsn=sentry_dsn,
         before_send=ignore_disallowedhost,
-        integrations=[DjangoIntegration()],
+        integrations=[
+            LoggingIntegration(
+                level=logging.INFO,        # Capture info and above as breadcrumbs
+                event_level=logging.INFO   # Send records as events
+            ),
+            DjangoIntegration(),
+        ],
         traces_sample_rate=0.2,
+        send_default_pii=True,
     )
 
 ROOT_URLCONF = "urls"
@@ -203,6 +215,28 @@ WAGTAILIMAGES_FORMAT_CONVERSIONS = {
 }
 
 # Logging configuration
+_logging_handlers = {
+    "console": {
+        "level": "INFO",
+        "class": "logging.StreamHandler",
+        "formatter": "simple",
+    },
+    "file": {
+        "level": "INFO",
+        "class": "logging.FileHandler",
+        "filename": os.path.join(BASE_DIR, "info.log"),
+        "formatter": "verbose",
+    },
+}
+
+_django_handlers = ["console", "file"]
+if SENTRY_ENABLED:
+    _logging_handlers["sentry"] = {
+        "level": "ERROR",  # Capture errors and above to Sentry
+        "class": "sentry_sdk.integrations.logging.EventHandler",
+    }
+    _django_handlers.append("sentry")
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -216,31 +250,14 @@ LOGGING = {
             "style": "{",
         },
     },
-    "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-        },
-        "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "info.log"),
-            "formatter": "verbose",
-        },
-        "sentry": {
-            "level": "ERROR",  # Capture errors and above to Sentry
-            "class": "sentry_sdk.integrations.logging.EventHandler",
-        },
-    },
+    "handlers": _logging_handlers,
     "loggers": {
         "django": {
-            "handlers": ["console", "file", "sentry"],
+            "handlers": _django_handlers,
             "level": "INFO",
             "propagate": True,
         },
     },
 }
 
-# to disable the checkDATA_UPLOAD_MAX_NUMBER_FIELDS = None
-DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
