@@ -29,7 +29,7 @@ services:
   # On the Cloud, your database runs on a dedicated cluster. Locally, we
   # replicate it in a Docker container called "db".
   db:
-    image: postgres:15.3-alpine
+    image: postgres:17
     container_name: wbi-db
     environment:
       POSTGRES_USER: "wbi"
