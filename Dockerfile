@@ -1,12 +1,18 @@
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
 FROM python:3.12.7-slim-bookworm
 
+ENV PYTHONUNBUFFERED=1
+
 # Install system packages required by Wagtail and Django.
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet \
-    --no-install-recommends build-essential libpq-dev gcc libjpeg62-turbo-dev \
-    zlib1g-dev libwebp-dev  libffi-dev git \
-    && pip install --upgrade pip \
-    && pip install pip-tools \
+    --no-install-recommends \
+    build-essential \
+    libmagic1 \
+    libpq-dev \
+    libjpeg62-turbo-dev \
+    zlib1g-dev \
+    libwebp-dev \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # set the working directory
