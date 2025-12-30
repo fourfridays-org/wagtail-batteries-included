@@ -1,5 +1,5 @@
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
-FROM python:3.12.7-slim-bookworm
+FROM python:3.14.2-slim-bookworm
 
 ENV PYTHONUNBUFFERED=1
 
