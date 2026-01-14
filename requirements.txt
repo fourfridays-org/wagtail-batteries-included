@@ -148,10 +148,11 @@ willow[heif]==1.12.0
     # via
     #   wagtail
     #   willow
-zope-event==5.0
-    # via gevent
-zope-interface==6.0
-    # via gevent
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
+zope-event==6.1
+    # via
+    #   -r requirements.in
+    #   gevent
+zope-interface==8.2
+    # via
+    #   -r requirements.in
+    #   gevent

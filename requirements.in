@@ -12,5 +12,7 @@ psycopg==3.3.2
 sentry-sdk==2.48.0
 wagtail==7.2.1
 whitenoise==6.11.0
+zope.event==6.1
+zope.interface==8.2
 
 wagtailcodeblock==1.29.0.2
