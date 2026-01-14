@@ -56,8 +56,7 @@ MIDDLEWARE = [
 ]
 
 sentry_dsn = os.environ.get("SENTRY_DSN", "")
-SENTRY_ENABLED = bool(sentry_dsn)
-if SENTRY_ENABLED:
+if sentry_dsn:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.logging import LoggingIntegration
@@ -82,22 +81,6 @@ if SENTRY_ENABLED:
     )
 
 ROOT_URLCONF = "urls"
-
-SECRET_KEY = os.environ.get("SECRET_KEY", default="<a string of random characters>")
-
-DEBUG = os.environ.get("DEBUG") == "True"
-
-DOMAIN_ALIASES = [
-    d.strip() for d in os.environ.get("DOMAIN_ALIASES", "").split(",") if d.strip()
-]
-
-ALLOWED_HOSTS = DOMAIN_ALIASES
-CSRF_TRUSTED_ORIGINS = [
-    os.environ.get("CSRF_TRUSTED_ORIGINS", default="http://localhost")
-]
-
-# Custom User model
-AUTH_USER_MODEL = "users.User"
 
 TEMPLATES = [
     {
@@ -138,10 +121,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Authentication Backends
+AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
+
+# SESSION DB
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 1209600  # Two weeks, in seconds
+
+SITE_ID = 1
+
 LANGUAGE_CODE = "en-us"
-USE_I18N = True
-USE_TZ = True
 TIME_ZONE = "UTC"
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = ["static"]
@@ -196,10 +191,22 @@ WAGTAIL_SITE_NAME = os.environ.get(
 )
 WAGTAILADMIN_BASE_URL = os.environ.get("WAGTAILADMIN_BASE_URL", default="localhost")
 
+DOMAIN_ALIASES = [
+    d.strip() for d in os.environ.get("DOMAIN_ALIASES", "").split(",") if d.strip()
+]
+
+ALLOWED_HOSTS = DOMAIN_ALIASES
+
+CSRF_TRUSTED_ORIGINS = [
+    os.environ.get("CSRF_TRUSTED_ORIGINS", default="http://localhost")
+]
+
+SECRET_KEY = os.environ.get("SECRET_KEY", default="<a string of random characters>")
+
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-SITE_ID = 1
 
 # Make low-quality but small images
+WAGTAILIMAGES_AVIF_QUALITY = 60
 WAGTAILIMAGES_JPEG_QUALITY = 70
 WAGTAILIMAGES_WEBP_QUALITY = 75
 WAGTAIL_ENABLE_WHATS_NEW_BANNER = False
@@ -210,33 +217,12 @@ WAGTAIL_CODE_BLOCK_LINE_NUMBERS = False
 WAGTAIL_CODE_BLOCK_THEME = "tomorrow"
 
 WAGTAILIMAGES_FORMAT_CONVERSIONS = {
+    "avif": "avif",
     'bmp': 'jpeg',
     'webp': 'webp',
 }
 
 # Logging configuration
-_logging_handlers = {
-    "console": {
-        "level": "INFO",
-        "class": "logging.StreamHandler",
-        "formatter": "simple",
-    },
-    "file": {
-        "level": "INFO",
-        "class": "logging.FileHandler",
-        "filename": os.path.join(BASE_DIR, "info.log"),
-        "formatter": "verbose",
-    },
-}
-
-_django_handlers = ["console", "file"]
-if SENTRY_ENABLED:
-    _logging_handlers["sentry"] = {
-        "level": "ERROR",  # Capture errors and above to Sentry
-        "class": "sentry_sdk.integrations.logging.EventHandler",
-    }
-    _django_handlers.append("sentry")
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -250,10 +236,26 @@ LOGGING = {
             "style": "{",
         },
     },
-    "handlers": _logging_handlers,
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "info.log"),
+            "formatter": "verbose",
+        },
+        "sentry": {
+            "level": "ERROR",  # Capture errors and above to Sentry
+            "class": "sentry_sdk.integrations.logging.EventHandler",
+        },
+    },
     "loggers": {
         "django": {
-            "handlers": _django_handlers,
+            "handlers": ["console", "file", "sentry"],
             "level": "INFO",
             "propagate": True,
         },
