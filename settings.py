@@ -226,6 +226,29 @@ WAGTAILIMAGES_FORMAT_CONVERSIONS = {
 }
 
 # Logging configuration
+_logging_handlers = {
+    "console": {
+        "level": "INFO",
+        "class": "logging.StreamHandler",
+        "formatter": "simple",
+    },
+    "file": {
+        "level": "INFO",
+        "class": "logging.FileHandler",
+        "filename": os.path.join(BASE_DIR, "info.log"),
+        "formatter": "verbose",
+    },
+}
+
+_django_handlers = ["console", "file"]
+if sentry_dsn:
+    _logging_handlers["sentry"] = {
+        "level": "ERROR",  # Capture errors and above to Sentry
+        "class": "sentry_sdk.integrations.logging.EventHandler",
+    }
+    _django_handlers.append("sentry")
+
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -239,28 +262,10 @@ LOGGING = {
             "style": "{",
         },
     },
-    "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-        },
-        "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "info.log"),
-            "formatter": "verbose",
-        },
-        "sentry": {
-            "level": "ERROR",  # Capture errors and above to Sentry
-            "class": "sentry_sdk.integrations.logging.EventHandler",
-        },
-    },
+    "handlers": _logging_handlers,
     "loggers": {
         "django": {
-            "handlers": ["console", "file", "sentry"],
-            "level": "INFO",
-            "propagate": True,
+            "handlers": _django_handlers,
         },
     },
 }
